@@ -1,0 +1,80 @@
+---
+title: "Demo cyrrilic Quarto PDF markdown"
+author: "Petr N."
+date: "`r Sys.Date()`"
+format: pdf
+pdf-engine: lualatex
+mainfont: Segoe UI
+sansfont: Segoe UI
+monofont: Cascadia Mono PL Light
+editor: visual
+---
+
+```{r include = F}
+# Загружаем библиотеки
+library(tidyverse)
+library(lubridate)
+library(showtext)
+
+showtext_auto()
+```
+
+```{r}
+#| include: false
+
+# Создаем вектор дат
+dates <- rep(seq(as.Date("2023-01-01"), length.out = 7, by = "days"), each = 2)
+
+# Создаем вектор с деньгами
+money <- sample(100:130, 14, replace = TRUE)
+
+# Создаем вектор с категориями
+source <- rep(c("Cat_A", "Cat_B"), 7)
+
+# Собираем все в датафрейм
+df <- data.frame(date = dates, money = money, source = source)
+```
+
+## Data set
+
+This is *random* dataset of money accured by time and 2 categories:
+
+```{r}
+# Печатаем датафрейм
+print(df)
+```
+
+## Исследование
+
+Тренд-лайны, текст, заметьте, кириллический как в описании, так и на осях:
+
+```{r}
+#| warning: false
+
+# plot 1
+ggplot(df, aes(x = date,
+               y = money,
+               col = source)) + 
+  geom_line() +
+  labs(title = "График тренда",
+       x = "Деньги",
+       y = "Дата") +
+  theme_minimal()
+```
+
+And the `stacked` bar chart:
+
+```{r}
+# plot 2
+ggplot(df, aes(x = date,
+               y = money,
+               fill = source)) + 
+  geom_col(position = "stack") +
+  theme_minimal()
+```
+
+## Sumary
+
+```{r}
+summary(df)
+```
